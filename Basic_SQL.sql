@@ -80,3 +80,86 @@ SELECT id, account_id, (poster_amt_usd/(standard_amt_usd + gloss_amt_usd + poste
 AS prec_reve_poster
 FROM orders 
 LIMIT 10;
+
+
+-- Use the accounts table to find
+	-- All the companies whose names start with 'C'.
+	SELECT id, name, website 
+	FROM accounts 
+	WHERE name 
+	LIKE 'C%';
+	-- All companies whose names contain the string 'one' somewhere in the name.
+	SELECT id, name, website 
+	FROM accounts 
+	WHERE name LIKE '%one%';
+	-- All companies whose names end with 's'.
+	SELECT id, name, website 
+	FROM accounts 
+	WHERE name LIKE '%s';
+
+-- Use the accounts table to find the account name, primary_poc, 
+-- and sales_rep_id for Walmart, Target, and Nordstrom.
+SELECT name, primary_poc, sales_rep_id 
+FROM accounts 
+WHERE name IN ('Walmart', 'Target', 'Nordstrom');
+
+-- Use the accounts table to find the account name, primary poc, 
+-- and sales rep id for all stores except Walmart, Target, and Nordstrom.
+SELECT name, primary_poc, sales_rep_id 
+FROM accounts 
+WHERE name NOT IN ('Walmart', 'Target', 'Nordstrom');
+
+-- Use the web_events table to find all information regarding 
+-- individuals who were contacted via any method except using organic or adwords methods.
+SELECT *
+FROM web_events
+WHERE channel NOT IN ('organic', 'adwords');
+
+-- Write a query that returns all the orders where the standard_qty is over 1000, 
+-- the poster_qty is 0, and the gloss_qty is 0.
+SELECT * FROM orders 
+WHERE standard_qty > 1000 
+AND poster_qty = 0 
+AND gloss_qty = 0;
+
+-- Using the accounts table, find all the companies 
+-- whose names do not start with 'C' and end with 's'.
+SELECT * FROM accounts 
+WHERE name NOT 
+LIKE 'C%' 
+AND name LIKE '%s';
+
+-- When you use the BETWEEN operator in SQL, 
+-- do the results include the values of your endpoints, or not? 
+-- Figure out the answer to this important question by writing a query that 
+-- displays the order date and gloss_qty data for all orders where gloss_qty 
+-- is between 24 and 29. Then look at your output to see 
+-- if the BETWEEN operator included the begin and end values or not.
+SELECT occurred_at, gloss_qty 
+FROM orders
+WHERE gloss_qty BETWEEN 24 AND 29;
+
+	-- the answer to the question is that yes, the BETWEEN operator 
+	-- in SQL is inclusive; that is, the endpoint values are included. 
+	-- So the BETWEEN statement in this query is equivalent to 
+	-- having written "WHERE gloss_qty >= 24 AND gloss_qty <= 29."
+
+
+-- Use the web_events table to find all information regarding individuals 
+-- who were contacted via the organic or adwords channels, and started their account
+--  at any point in 2016, sorted from newest to oldest.
+SELECT *
+FROM web_events
+WHERE channel IN ('organic', 'adwords') AND occurred_at BETWEEN '2016-01-01' AND '2017-01-01'
+ORDER BY occurred_at DESC;
+
+-- Find list of orders ids where either gloss_qty or poster_qty is greater than 4000. 
+-- Only include the id field in the resulting table.
+
+
+-- Write a query that returns a list of orders where the standard_qty is zero and 
+-- either the gloss_qty or poster_qty is over 1000.
+
+
+-- Find all the company names that start with a 'C' or 'W', and 
+-- the primary contact contains 'ana' or 'Ana', but it doesn't contain 'eana'
