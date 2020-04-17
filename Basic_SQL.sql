@@ -1,5 +1,5 @@
-#SQL STATEMENTS
-#Used UPPERCASE for KEYWORDS and lowercase for other text
+-- SQL STATEMENTS
+/*Used UPPERCASE for KEYWORDS and lowercase for other text*/
 
 SELECT occurred_at, account_id, channel 
 FROM web_events;
