@@ -20,3 +20,5 @@ SELECT orders.standard_qty, orders.gloss_qty, orders.poster_qty, accounts.primar
 FROM orders 
 JOIN accounts 
 ON orders.account_id = accounts.id;
+
+-- More will be added soon!
