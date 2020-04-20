@@ -132,6 +132,13 @@ ORDER BY a_name;
 -- where the sales rep has a last name starting with K and in the Midwest region. 
 -- Your final table should include three columns: the region name, the sales rep name, 
 -- and the account name. Sort the accounts alphabetically (A-Z) according to account name.
+SELECT r.name r_name, s_r.name s_r_name, a.name a_name 
+FROM sales_reps s_r 
+JOIN region r 
+ON s_r.region_id = r.id AND r.name = 'Midwest' AND s_r.name LIKE '% K%' 
+JOIN accounts a 
+ON a.sales_rep_id = s_r.id 
+ORDER BY a_name;
 
 
 -- Provide the name for each region for every order, as well as the account name 
@@ -140,6 +147,14 @@ ORDER BY a_name;
 -- Your final table should have 3 columns: region name, account name, and unit price. 
 -- In order to avoid a division by zero error, adding .01 to the denominator here is 
 -- helpful total_amt_usd/(total+0.01).
+SELECT r.name r_name, a.name a_name, (o.total_amt_usd / (o.total + 0.01)) unit_price 
+FROM orders o 
+JOIN accounts a 
+ON o.account_id = a.id AND o.standard_qty > 100 
+JOIN sales_reps s_r 
+ON a.sales_rep_id = s_r.id 
+JOIN region r 
+ON s_r.region_id = r.id;
 
 
 -- Provide the name for each region for every order, as well as the account name and 
