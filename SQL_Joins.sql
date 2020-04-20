@@ -163,6 +163,17 @@ JOIN accounts a
 ON a.sales_rep_id = s_r.id 
 ORDER BY a_name;
 
+--Equivalent
+
+SELECT r.name region, s.name rep, a.name account
+FROM sales_reps s
+JOIN region r
+ON s.region_id = r.id
+JOIN accounts a
+ON a.sales_rep_id = s.id
+WHERE r.name = 'Midwest' AND s.name LIKE '% K%'
+ORDER BY a.name;
+
 
 -- Provide the name for each region for every order, as well as the account name 
 -- and the unit price they paid (total_amt_usd/total) for the order. However, 
@@ -178,6 +189,18 @@ JOIN sales_reps s_r
 ON a.sales_rep_id = s_r.id 
 JOIN region r 
 ON s_r.region_id = r.id;
+
+--Equivalent
+
+SELECT r.name region, a.name account, o.total_amt_usd/(o.total + 0.01) unit_price
+FROM region r
+JOIN sales_reps s
+ON s.region_id = r.id
+JOIN accounts a
+ON a.sales_rep_id = s.id
+JOIN orders o
+ON o.account_id = a.id
+WHERE o.standard_qty > 100;
 
 
 -- Provide the name for each region for every order, as well as the account name and 
@@ -197,8 +220,18 @@ JOIN region r
 ON s_r.region_id = r.id
 ORDER BY unit_price;
 
+--Equivalent
 
-
+SELECT r.name region, a.name account, o.total_amt_usd/(o.total + 0.01) unit_price
+FROM region r
+JOIN sales_reps s
+ON s.region_id = r.id
+JOIN accounts a
+ON a.sales_rep_id = s.id
+JOIN orders o
+ON o.account_id = a.id
+WHERE o.standard_qty > 100 AND o.poster_qty > 50
+ORDER BY unit_price;
 
 -- Provide the name for each region for every order, as well as the account name 
 -- and the unit price they paid (total_amt_usd/total) for the order. However, you 
@@ -217,6 +250,18 @@ JOIN region r
 ON s_r.region_id = r.id
 ORDER BY unit_price DESC;
 
+--Equivalent
+
+SELECT r.name region, a.name account, o.total_amt_usd/(o.total + 0.01) unit_price
+FROM region r
+JOIN sales_reps s
+ON s.region_id = r.id
+JOIN accounts a
+ON a.sales_rep_id = s.id
+JOIN orders o
+ON o.account_id = a.id
+WHERE o.standard_qty > 100 AND o.poster_qty > 50
+ORDER BY unit_price DESC;
 
 -- What are the different channels used by account id 1001? Your final table should 
 -- have only 2 columns: account name and the different channels. You can try 
@@ -226,11 +271,25 @@ FROM accounts a
 JOIN web_events w_e 
 ON a.id = w_e.account_id AND w_e.account_id = '1001';
 
+--Equivalent
+
+SELECT DISTINCT a.name, w.channel
+FROM accounts a
+JOIN web_events w
+ON a.id = w.account_id
+WHERE a.id = '1001';
+
 -- Find all the orders that occurred in 2015. Your final table should have 4 columns: 
 -- occurred_at, account name, order total, and order total_amt_usd.
-SELECT w_e.occurred_at, a.name, o.total, o.total_amt_usd 
-FROM orders o 
-JOIN accounts a ON o.account_id = a.id 
-JOIN web_events w_e 
-ON a.id = w_e.account_id AND w_e.occurred_at LIKE '2015 %';
+SELECT o.occurred_at, a.name, o.total, o.total_amt_usd
+FROM accounts a
+JOIN orders o
+ON o.account_id = a.id
+WHERE o.occurred_at BETWEEN '01-01-2015' AND '01-01-2016'
+ORDER BY o.occurred_at DESC
+
+
+
+
+
 
