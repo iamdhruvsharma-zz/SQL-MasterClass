@@ -110,8 +110,20 @@ SELECT r.name r_name, s_r.name s_r_name, a.name a_name
 FROM sales_reps s_r 
 JOIN region r 
 ON s_r.region_id = r.id AND r.name = 'Midwest' 
-JOIN accounts a ON a.sales_rep_id = s_r.id;
+JOIN accounts a 
+ON a.sales_rep_id = s_r.id
+ORDER BY a_name;
 
+--Equivalent
+
+SELECT r.name region, s.name rep, a.name account
+FROM sales_reps s
+JOIN region r
+ON s.region_id = r.id
+JOIN accounts a
+ON a.sales_rep_id = s.id
+WHERE r.name = 'Midwest'
+ORDER BY a.name;
 
 -- Provide a table that provides the region for each sales_rep along 
 -- with their associated accounts. This time only for accounts where 
@@ -125,6 +137,17 @@ ON s_r.region_id = r.id AND r.name = 'Midwest' AND s_r.name LIKE 'S%'
 JOIN accounts a 
 ON a.sales_rep_id = s_r.id 
 ORDER BY a_name;
+
+--Equivalent
+
+SELECT r.name region, s.name rep, a.name account
+FROM sales_reps s
+JOIN region r
+ON s.region_id = r.id
+JOIN accounts a
+ON a.sales_rep_id = s.id
+WHERE r.name = 'Midwest' AND s.name LIKE 'S%'
+ORDER BY a.name;
 
 
 -- Provide a table that provides the region for each sales_rep along 
@@ -205,4 +228,9 @@ ON a.id = w_e.account_id AND w_e.account_id = '1001';
 
 -- Find all the orders that occurred in 2015. Your final table should have 4 columns: 
 -- occurred_at, account name, order total, and order total_amt_usd.
+SELECT w_e.occurred_at, a.name, o.total, o.total_amt_usd 
+FROM orders o 
+JOIN accounts a ON o.account_id = a.id 
+JOIN web_events w_e 
+ON a.id = w_e.account_id AND w_e.occurred_at LIKE '2015 %';
 
