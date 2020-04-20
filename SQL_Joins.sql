@@ -164,6 +164,17 @@ ON s_r.region_id = r.id;
 -- region name, account name, and unit price. Sort for the smallest unit price first. 
 -- In order to avoid a division by zero error, adding .01 to the denominator here is 
 -- helpful (total_amt_usd/(total+0.01).
+SELECT r.name r_name, a.name a_name, (o.total_amt_usd / (o.total + 0.01)) unit_price 
+FROM orders o 
+JOIN accounts a 
+ON o.account_id = a.id AND o.standard_qty > 100 AND o.poster_qty > 50 
+JOIN sales_reps s_r 
+ON a.sales_rep_id = s_r.id 
+JOIN region r 
+ON s_r.region_id = r.id
+ORDER BY unit_price;
+
+
 
 
 -- Provide the name for each region for every order, as well as the account name 
@@ -173,12 +184,24 @@ ON s_r.region_id = r.id;
 -- name, account name, and unit price. Sort for the largest unit price first. In 
 -- order to avoid a division by zero error, adding .01 to the denominator here is 
 -- helpful (total_amt_usd/(total+0.01).
+SELECT r.name r_name, a.name a_name, (o.total_amt_usd / (o.total + 0.01)) unit_price 
+FROM orders o 
+JOIN accounts a 
+ON o.account_id = a.id AND o.standard_qty > 100 AND o.poster_qty > 50 
+JOIN sales_reps s_r 
+ON a.sales_rep_id = s_r.id 
+JOIN region r 
+ON s_r.region_id = r.id
+ORDER BY unit_price DESC;
 
 
 -- What are the different channels used by account id 1001? Your final table should 
 -- have only 2 columns: account name and the different channels. You can try 
 -- SELECT DISTINCT to narrow down the results to only the unique values.
-
+SELECT DISTINCT a.name a_name, w_e.channel channel 
+FROM accounts a 
+JOIN web_events w_e 
+ON a.id = w_e.account_id AND w_e.account_id = '1001';
 
 -- Find all the orders that occurred in 2015. Your final table should have 4 columns: 
 -- occurred_at, account name, order total, and order total_amt_usd.
